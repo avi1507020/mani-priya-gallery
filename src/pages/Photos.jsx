@@ -86,7 +86,14 @@ const Photos = ({ eventId, eventTitle }) => {
                 alt={file.name || "Event memory"} 
                 className="w-full h-auto object-cover block"
                 loading="lazy"
-                onError={(e) => { e.target.src = 'https://via.placeholder.com/400x500?text=Heart+Memory' }}
+                onError={(e) => { 
+                  if (!e.target.dataset.tried) {
+                    e.target.dataset.tried = "true";
+                    e.target.src = `https://drive.google.com/thumbnail?id=${file.id}&sz=s400`;
+                  } else {
+                    e.target.src = 'https://via.placeholder.com/400x500?text=Memory+Ready+Soon';
+                  }
+                }}
               />
               <div className="image-overlay"></div>
             </div>
