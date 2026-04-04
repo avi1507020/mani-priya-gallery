@@ -4,8 +4,14 @@ import { motion } from 'framer-motion';
 export const MusicContext = createContext();
 
 export const MusicProvider = ({ children }) => {
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(() => {
+    return localStorage.getItem('musicPlaying') === 'true';
+  });
   const audioRef = useRef(null);
+
+  useEffect(() => {
+    localStorage.setItem('musicPlaying', isPlaying);
+  }, [isPlaying]);
 
   useEffect(() => {
     audioRef.current = new Audio('/bg.mp3'); 

@@ -31,18 +31,18 @@ const GalleryModal = ({ isOpen, onClose, photos, currentIndex, setCurrentIndex, 
             className="absolute inset-0 bg-black/80 backdrop-blur-xl"
           ></motion.div>
           
+          <button 
+            onClick={onClose} 
+            className="fixed top-4 right-4 md:top-8 md:right-8 z-[110] text-white bg-white/10 hover:bg-white/30 backdrop-blur-md rounded-full w-12 h-12 flex items-center justify-center text-2xl transition-all duration-300 shadow-xl border border-white/20"
+            aria-label="Close"
+          >✕</button>
+
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.8, opacity: 0 }}
-            className="relative z-10 flex flex-col items-center justify-center w-full h-full max-w-5xl max-h-[90vh]"
-            onMouseEnter={() => isSlideshow && setIsSlideshow(false)}
+            className="relative z-10 flex flex-col items-center justify-center w-full h-full max-w-5xl"
           >
-            <button 
-              onClick={onClose} 
-              className="absolute top-0 right-4 md:-right-12 z-20 text-white bg-white/20 hover:bg-white/40 rounded-full w-10 h-10 flex items-center justify-center text-xl transition-colors"
-              aria-label="Close"
-            >✕</button>
 
             <button 
               onClick={(e) => { e.stopPropagation(); setCurrentIndex((prev) => (prev - 1 + photos.length) % photos.length); }}
@@ -50,11 +50,11 @@ const GalleryModal = ({ isOpen, onClose, photos, currentIndex, setCurrentIndex, 
               aria-label="Previous"
             >‹</button>
 
-            <div className="protect-image-wrapper relative flex justify-center items-center h-full w-full max-h-[85vh]">
+            <div className="protect-image-wrapper relative flex justify-center items-center h-auto max-h-[80vh] w-full">
               <img 
                 src={currentPhoto?.thumbnailUrl?.replace(/=w\d+/, '=w1600') || currentPhoto?.thumbnailUrl} 
                 alt="Memory" 
-                className="max-w-[90vw] max-h-[90vh] object-contain rounded-2xl pointer-events-none"
+                className="max-w-[95vw] max-h-[80vh] md:max-h-[85vh] object-contain rounded-2xl pointer-events-none shadow-2xl"
                 loading="lazy"
               />
               <div className="image-overlay rounded-2xl"></div>
