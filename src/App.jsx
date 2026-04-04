@@ -1,18 +1,18 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { useProtection } from './hooks/useProtection';
 import Home from './pages/Home';
 import EventPage from './pages/EventPage';
-import MusicToggle from './components/MusicToggle';
+import FloatingHearts from './components/FloatingHearts';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 
 function App() {
-  // Apply globally using custom hook
   useProtection();
 
   return (
-    <div className="w-full min-h-screen text-white font-poppins flex flex-col">
-      {/* Toast provider for notifications */}
+    <div className="relative min-h-screen text-white font-poppins w-full flex flex-col bg-animated-gradient selection:bg-rose selection:text-white">
       <Toaster 
         position="top-center"
         toastOptions={{
@@ -22,32 +22,22 @@ function App() {
             color: '#fff',
             border: '1px solid rgba(255, 77, 141, 0.3)',
             fontFamily: '"Poppins", sans-serif',
-            fontSize: '14px',
-            borderRadius: '9999px',
-          },
-          success: {
-            iconTheme: {
-              primary: '#FFD700',
-              secondary: '#1A0A2E',
-            },
           },
         }}
       />
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/event/:eventId" element={<EventPage />} />
-        {/* Handle unknowns */}
-        <Route path="*" element={<Home />} />
-      </Routes>
+      <FloatingHearts />
+      <Navbar />
 
-      <MusicToggle />
+      <main className="flex-1 w-full relative z-10 flex flex-col pt-[60px] md:pt-[68px] lg:pt-[72px]">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/event/:eventId" element={<EventPage />} />
+          <Route path="*" element={<Home />} />
+        </Routes>
+      </main>
 
-      <div className="fixed bottom-2 left-0 w-full text-center z-40 pointer-events-none opacity-40">
-        <p className="text-[10px] sm:text-xs text-white/50 font-poppins">
-          🔒 This gallery is protected. Screenshots may still be possible on some devices. Please respect our privacy.
-        </p>
-      </div>
+      <Footer />
     </div>
   );
 }

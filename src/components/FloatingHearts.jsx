@@ -1,18 +1,19 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 
-const heartColors = ['text-rose-500', 'text-gold-500', 'text-lavender', 'text-peach', 'text-pink-400'];
-
 const FloatingHearts = () => {
-  const hearts = Array.from({ length: 12 }).map((_, i) => ({
-    id: i,
-    size: Math.random() * (40 - 16) + 16,
-    left: Math.random() * 100,
-    duration: Math.random() * (12 - 4) + 4,
-    delay: Math.random() * 5,
-    colorClass: heartColors[Math.floor(Math.random() * heartColors.length)],
-    opacity: Math.random() * (0.6 - 0.3) + 0.3
-  }));
+  const hearts = useMemo(() => {
+    const colors = ['text-[#FF4D8D]', 'text-[#FFD700]', 'text-[#C8A2C8]'];
+    return Array.from({ length: 12 }).map((_, i) => ({
+      id: i,
+      size: Math.random() * (40 - 16) + 16,
+      left: Math.random() * 100, // percentage vw
+      duration: Math.random() * (12 - 4) + 4,
+      delay: Math.random() * 8,
+      colorClass: colors[Math.floor(Math.random() * colors.length)],
+      opacity: Math.random() * (0.6 - 0.3) + 0.3
+    }));
+  }, []);
 
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
@@ -20,7 +21,7 @@ const FloatingHearts = () => {
         <motion.div
           key={heart.id}
           initial={{ y: '100vh', opacity: 0 }}
-          animate={{ y: '-20vh', opacity: heart.opacity }}
+          animate={{ y: '-10vh', opacity: heart.opacity }}
           transition={{
             duration: heart.duration,
             repeat: Infinity,

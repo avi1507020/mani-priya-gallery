@@ -1,7 +1,4 @@
-/**
- * Adds a watermark to an image and returns a blob or data URL
- */
-export const extractWatermarkedImage = async (imageUrl, eventName) => {
+export const addWatermark = async (imageUrl, eventName) => {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.crossOrigin = 'Anonymous';
@@ -16,24 +13,25 @@ export const extractWatermarkedImage = async (imageUrl, eventName) => {
       
       // Setup text style
       ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
-      const fontSize = Math.max(16, Math.min(img.width * 0.03, 40)); 
-      ctx.font = `${fontSize}px Poppins, sans-serif`;
+      ctx.font = 'bold 16px Poppins, sans-serif';
       ctx.textAlign = 'right';
+      ctx.textBaseline = 'bottom';
       
       const text = `Mani ❤️ Priya | ${eventName || 'Our Journey'}`;
       
       // Add a slight dark shadow for visibility
-      ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
       ctx.shadowBlur = 4;
       ctx.shadowOffsetX = 2;
       ctx.shadowOffsetY = 2;
       
-      const padding = fontSize;
+      const padding = 20;
       ctx.fillText(text, canvas.width - padding, canvas.height - padding);
       
       // Return blob
       canvas.toBlob((blob) => {
-        resolve(URL.createObjectURL(blob));
+        if(blob) resolve(blob);
+        else reject(new Error('Canvas toBlob failed'));
       }, 'image/jpeg', 0.95);
     };
     img.onerror = (err) => reject(new Error('Failed to load image for watermarking'));

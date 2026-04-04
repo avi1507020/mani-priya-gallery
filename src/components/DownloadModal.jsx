@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { extractWatermarkedImage } from '../utils/watermark';
+import { addWatermark } from '../utils/watermark';
 import toast from 'react-hot-toast';
 
-const DownloadModal = ({ isOpen, onClose, fileUrl, fileName, eventName }) => {
+const DownloadModal = ({ isOpen, onClose, file, eventName }) => {
   const [pin, setPin] = useState('');
   const [errorShake, setErrorShake] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
 
-  if (!isOpen) return null;
+  if (!isOpen || !file) return null;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,22 +18,24 @@ const DownloadModal = ({ isOpen, onClose, fileUrl, fileName, eventName }) => {
       setIsDownloading(true);
       
       try {
-        if(fileName.match(/\.(mp4|webm|ogg|mov)$/i)) {
-             const a = document.createElement('a');
-             a.href = fileUrl;
-             a.download = fileName || 'mani-priya-video.mp4';
-             document.body.appendChild(a);
-             a.click();
-             a.remove();
+        if (file.mimeType && file.mimeType.includes('video')) {
+          // Video: Open drive download link directly
+          window.open(file.downloadUrl, '_blank');
         } else {
-             const watermarkedUrl = await extractWatermarkedImage(fileUrl, eventName);
-             const a = document.createElement('a');
-             a.href = watermarkedUrl;
-             a.download = fileName || 'mani-priya-moment.jpg';
-             document.body.appendChild(a);
-             a.click();
-             a.remove();
+          // Photos: fetch and canvas watermark
+          const highResUrl = file.thumbnailUrl.replace(/=w\d+/, '=w1600');
+          const blob = await addWatermark(highResUrl, eventName);
+          const blobUrl = URL.createObjectURL(blob);
+          
+          const a = document.createElement('a');
+          a.href = blobUrl;
+          a.download = file.name || 'mani-priya-moment.jpg';
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
         }
+        
         toast.success("Downloaded with love! 💖");
         setTimeout(() => {
           onClose();
@@ -41,15 +43,18 @@ const DownloadModal = ({ isOpen, onClose, fileUrl, fileName, eventName }) => {
           setIsSuccess(false);
           setIsDownloading(false);
         }, 2000);
-      } catch(err) {
+      } catch (err) {
+        console.error("Download failed:", err);
         toast.error("Failed to process download");
         setIsDownloading(false);
       }
     } else {
       setErrorShake(true);
-      setPin('');
-      setTimeout(() => setErrorShake(false), 500);
       toast.error('Wrong Code 💔 Try Again');
+      setTimeout(() => {
+        setErrorShake(false);
+        setPin('');
+      }, 1000);
     }
   };
 
@@ -85,9 +90,14 @@ const DownloadModal = ({ isOpen, onClose, fileUrl, fileName, eventName }) => {
             {isSuccess ? '💖' : '🔒'}
           </motion.div>
           
-          <h3 className="font-playfair text-xl mb-6 text-center">
+          <h3 className="font-playfair text-2xl mb-1 text-center text-white">
             {isSuccess ? 'Unlocked 💕' : 'Enter Secret Love Code 💖'}
           </h3>
+          {!isSuccess && (
+            <p className="text-sm text-white/60 text-center mb-6">
+              This gallery is protected with love 🔐
+            </p>
+          )}
           
           <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4">
             <input
@@ -104,7 +114,7 @@ const DownloadModal = ({ isOpen, onClose, fileUrl, fileName, eventName }) => {
             <button
               type="submit"
               disabled={isSuccess || isDownloading || pin.length < 4}
-              className="bg-gradient-to-r from-rose-500 to-pink-400 py-3 rounded-lg font-poppins font-semibold text-white shadow-lg hover:shadow-rose-500/50 transition-all disabled:opacity-50"
+              className="bg-gradient-to-r from-rose to-pink-400 py-3 rounded-lg font-poppins font-semibold text-white shadow-lg hover:shadow-rose/50 transition-all disabled:opacity-50 cursor-pointer"
             >
               {isDownloading ? 'Processing...' : 'Unlock 💕'}
             </button>

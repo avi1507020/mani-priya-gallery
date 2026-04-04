@@ -1,69 +1,62 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../firebase/config';
+import toast from 'react-hot-toast';
 import Photos from './Photos';
 import Videos from './Videos';
-import toast from 'react-hot-toast';
+
+const eventsDict = {
+  ashirwad: {
+    id: "ashirwad",
+    title: "Ashirwad Ceremony",
+    emoji: "🎉",
+    date: "22 February 2026",
+    description: "The beautiful beginning of our forever journey",
+    status: "active",
+    gradient: "from-pink-500 to-rose-400"
+  },
+  prewedding: {
+    id: "prewedding",
+    title: "Pre-Wedding",
+    emoji: "💑",
+    date: "Coming Soon",
+    description: "Our story captured before the big day",
+    status: "coming-soon",
+    gradient: "from-purple-500 to-lavender-400"
+  },
+  marriage: {
+    id: "marriage",
+    title: "Marriage Ceremony",
+    emoji: "🔔",
+    date: "Coming Soon",
+    description: "The day we became one forever",
+    status: "coming-soon",
+    gradient: "from-yellow-400 to-gold-400"
+  }
+};
 
 const EventPage = () => {
   const { eventId } = useParams();
   const navigate = useNavigate();
-  const location = useLocation();
   const [activeTab, setActiveTab] = useState('photos');
-  const [eventData, setEventData] = useState(location.state?.event || null);
+  
+  const eventData = eventsDict[eventId];
 
-  useEffect(() => {
-    const fetchEvent = async () => {
-      // If we didn't receive event state from Home, fetch it
-      if (!eventData) {
-        try {
-          const docRef = doc(db, 'events', eventId);
-          const docSnap = await getDoc(docRef);
-          
-          if (docSnap.exists()) {
-            setEventData({ id: docSnap.id, ...docSnap.data() });
-          } else {
-            // Check fallback for demo purposes
-            const fallbackEvents = {
-              'ashirwad': { id: 'ashirwad', emoji: '🎉', title: 'Ashirwad Ceremony', date: '22 Feb 2026', coverGradient: 'from-rose-500 to-pink-400', description: 'The beginning of forever...' }
-            };
-            if(fallbackEvents[eventId]) {
-                setEventData(fallbackEvents[eventId]);
-            } else {
-                toast.error("Event not found");
-                navigate('/');
-            }
-          }
-        } catch(e) {
-          console.error("Error fetching event", e);
-          const fallbackEvents = {
-            'ashirwad': { id: 'ashirwad', emoji: '🎉', title: 'Ashirwad Ceremony', date: '22 Feb 2026', coverGradient: 'from-rose-500 to-pink-400', description: 'The beginning of forever...' }
-          };
-          if(fallbackEvents[eventId]) {
-              setEventData(fallbackEvents[eventId]);
-          } else {
-              toast.error("Event not found");
-              navigate('/');
-          }
-        }
-      }
-    };
-    fetchEvent();
-  }, [eventId, eventData, navigate]);
+  if (!eventData) {
+    toast.error("Event not found");
+    navigate('/');
+    return null;
+  }
 
-  if (!eventData) return null; // or a loading spinner
-
-  const gradientClass = eventData.coverGradient || "from-rose-500 to-pink-400";
+  const gradientClass = eventData.gradient || "from-rose to-pink-400";
 
   return (
-    <div className="min-h-screen relative z-10 w-full max-w-6xl mx-auto px-4 py-8">
+    <div className="w-full max-w-6xl mx-auto px-4 pt-28 pb-8 relative">
       <button 
         onClick={() => navigate('/')}
-        className="group flex items-center gap-2 text-white/70 hover:text-white font-poppins mb-6 transition-colors glass-card px-4 py-2 w-max"
+        className="group flex items-center gap-2 text-white/80 hover:text-white font-poppins mb-8 transition-all duration-300 bg-white/5 hover:bg-white/15 border border-white/10 hover:border-white/30 backdrop-blur-md rounded-full px-6 py-2.5 w-max shadow-lg shadow-black/20"
       >
-        <span className="group-hover:-translate-x-1 transition-transform">←</span> Back Home
+        <span className="group-hover:-translate-x-1.5 transition-transform duration-300">←</span> Back
       </button>
 
       <div className={`w-full rounded-3xl p-8 mb-8 relative overflow-hidden bg-gradient-to-r ${gradientClass}`}>
@@ -91,7 +84,7 @@ const EventPage = () => {
           <button
             onClick={() => setActiveTab('photos')}
             className={`px-6 py-2 rounded-full font-poppins text-sm transition-all duration-300 ${
-              activeTab === 'photos' ? 'bg-gold text-black font-semibold shadow-lg' : 'text-white/50 hover:text-white hover:bg-white/10'
+              activeTab === 'photos' ? 'bg-gold text-dark font-semibold shadow-lg' : 'text-white/50 hover:text-white hover:bg-white/10'
             }`}
           >
             📷 Photos
@@ -99,7 +92,7 @@ const EventPage = () => {
           <button
             onClick={() => setActiveTab('videos')}
             className={`px-6 py-2 rounded-full font-poppins text-sm transition-all duration-300 ${
-              activeTab === 'videos' ? 'bg-gold text-black font-semibold shadow-lg' : 'text-white/50 hover:text-white hover:bg-white/10'
+              activeTab === 'videos' ? 'bg-gold text-dark font-semibold shadow-lg' : 'text-white/50 hover:text-white hover:bg-white/10'
             }`}
           >
             🎬 Videos
@@ -116,7 +109,6 @@ const EventPage = () => {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 20 }}
               transition={{ duration: 0.3 }}
-              className="w-full absolute left-0"
             >
               <Photos eventId={eventId} eventTitle={eventData.title} />
             </motion.div>
@@ -129,7 +121,6 @@ const EventPage = () => {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.3 }}
-              className="w-full absolute left-0"
             >
               <Videos eventId={eventId} eventTitle={eventData.title} />
             </motion.div>
