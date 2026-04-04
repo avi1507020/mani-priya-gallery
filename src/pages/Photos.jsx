@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Masonry from 'react-masonry-css';
 import { motion } from 'framer-motion';
 import { useDriveMedia } from '../hooks/useDriveMedia';
+import toast from 'react-hot-toast';
 import LoadingSpinner from '../components/LoadingSpinner';
 import EmptyState from '../components/EmptyState';
 import GalleryModal from '../components/GalleryModal';
@@ -16,6 +17,19 @@ const Photos = ({ eventId, eventTitle }) => {
   const [isSlideshow, setIsSlideshow] = useState(false);
 
   useEffect(() => {
+    if (loading) {
+      toast.loading("Fetching memories for you... 💖", { id: 'fetch-media' });
+    } else {
+      toast.dismiss('fetch-media');
+      if (error) {
+        toast.error(error);
+      } else if (files.length > 0) {
+        toast.success(`${files.length} Memories Loaded! ✨`, { duration: 2000, id: 'fetch-success' });
+      }
+    }
+  }, [loading, error, files.length]);
+
+  useEffect(() => {
     let interval;
     if (isSlideshow && isGalleryOpen && files.length > 0) {
       interval = setInterval(() => {
@@ -23,7 +37,7 @@ const Photos = ({ eventId, eventTitle }) => {
       }, 3000);
     }
     return () => clearInterval(interval);
-  }, [isSlideshow, isGalleryOpen, files]);
+  }, [isSlideshow, isGalleryOpen, files.length]);
 
   if (loading) return <LoadingSpinner />;
   if (error) return <div className="text-center text-rose py-10">{error}</div>;
@@ -80,12 +94,12 @@ const Photos = ({ eventId, eventTitle }) => {
             className="mb-4 relative group cursor-pointer rounded-2xl overflow-hidden glass-card shadow-lg"
             onClick={() => openGallery(index)}
           >
-            <div className="protect-image-wrapper w-full h-full">
+            <div className="protect-image-wrapper w-full min-h-[250px] bg-white/5 flex items-center justify-center">
               <img 
                 src={file.thumbnailUrl} 
                 alt={file.name || "Event memory"} 
-                className="w-full h-auto object-cover block"
-                loading="lazy"
+                className="w-full h-auto object-cover block transition-opacity duration-500"
+                loading="eager"
                 onError={(e) => { 
                   if (!e.target.dataset.tried) {
                     e.target.dataset.tried = "true";
