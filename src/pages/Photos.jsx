@@ -145,6 +145,7 @@ const Photos = ({ eventId, eventTitle }) => {
         eventName={eventTitle || 'Event'}
         isSlideshow={isSlideshow}
         setIsSlideshow={setIsSlideshow}
+        onDownload={handleDownloadClick}
       />
 
       <DownloadModal

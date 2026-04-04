@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const GalleryModal = ({ isOpen, onClose, photos, currentIndex, setCurrentIndex, eventName, eventDate, isSlideshow, setIsSlideshow }) => {
+const GalleryModal = ({ isOpen, onClose, photos, currentIndex, setCurrentIndex, eventName, eventDate, isSlideshow, setIsSlideshow, onDownload }) => {
   if (!isOpen || photos.length === 0) return null;
 
   useEffect(() => {
@@ -72,10 +72,16 @@ const GalleryModal = ({ isOpen, onClose, photos, currentIndex, setCurrentIndex, 
               <span className="text-4xl mb-1">›</span>
             </button>
 
-            <div className="absolute bottom-[-40px] text-center w-full">
-              <p className="font-playfair text-gold text-lg md:text-xl drop-shadow-xl font-bold tracking-wide italic">
+            <div className="absolute bottom-[-30px] md:bottom-[-50px] text-center w-full flex flex-col items-center gap-2">
+              <p className="font-playfair text-gold text-base md:text-xl drop-shadow-xl font-bold tracking-wide italic">
                 ❤️ {eventName} Moment
               </p>
+              <button 
+                onClick={(e) => onDownload(e, currentPhoto)}
+                className="bg-white/10 hover:bg-gold text-white hover:text-dark px-6 py-2 rounded-full backdrop-blur-md border border-white/20 transition-all duration-300 font-poppins text-xs md:text-sm flex items-center gap-2 pointer-events-auto shadow-lg"
+              >
+                <span>Download High-Res</span> ⬇
+              </button>
             </div>
           </motion.div>
         </div>
