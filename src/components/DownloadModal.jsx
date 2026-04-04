@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { addWatermark } from '../utils/watermark';
 import toast from 'react-hot-toast';
@@ -8,6 +8,7 @@ const DownloadModal = ({ isOpen, onClose, file, eventName }) => {
   const [errorShake, setErrorShake] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
+  const inputRef = useRef(null);
 
   if (!isOpen || !file) return null;
 
@@ -47,14 +48,15 @@ const DownloadModal = ({ isOpen, onClose, file, eventName }) => {
         console.error("Download failed:", err);
         toast.error("Failed to process download");
         setIsDownloading(false);
+        setIsSuccess(false);
       }
     } else {
       setErrorShake(true);
       toast.error('Wrong Code 💔 Try Again');
+      setPin('');
       setTimeout(() => {
         setErrorShake(false);
-        setPin('');
-      }, 1000);
+      }, 500);
     }
   };
 
@@ -106,6 +108,7 @@ const DownloadModal = ({ isOpen, onClose, file, eventName }) => {
               value={pin}
               onChange={(e) => setPin(e.target.value)}
               disabled={isSuccess || isDownloading}
+              ref={inputRef}
               className="bg-white/10 border border-gold/50 rounded-lg py-3 px-4 text-center tracking-widest text-xl text-white outline-none focus:border-gold focus:bg-white/20 transition-all font-poppins"
               placeholder="••••"
               autoFocus
