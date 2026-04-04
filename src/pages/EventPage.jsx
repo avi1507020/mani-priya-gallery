@@ -51,15 +51,17 @@ const EventPage = () => {
   const gradientClass = eventData.gradient || "from-rose to-pink-400";
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-4 pt-28 pb-8 relative">
-      <button 
-        onClick={() => navigate('/')}
-        className="group flex items-center gap-2 text-white/80 hover:text-white font-poppins mb-8 transition-all duration-300 bg-white/5 hover:bg-white/15 border border-white/10 hover:border-white/30 backdrop-blur-md rounded-full px-6 py-2.5 w-max shadow-lg shadow-black/20"
-      >
-        <span className="group-hover:-translate-x-1.5 transition-transform duration-300">←</span> Back
-      </button>
+    <div className="w-full max-w-6xl mx-auto px-4 pt-20 pb-8 relative">
+      <div className="flex items-center gap-4 mb-6">
+        <button 
+          onClick={() => navigate('/')}
+          className="group flex items-center gap-2 text-white/80 hover:text-white font-poppins transition-all duration-300 bg-white/5 hover:bg-white/15 border border-white/10 hover:border-white/30 backdrop-blur-md rounded-full px-5 py-2 w-max shadow-lg"
+        >
+          <span className="group-hover:-translate-x-1.5 transition-transform duration-300">←</span> Back
+        </button>
+      </div>
 
-      <div className={`w-full rounded-3xl p-8 mb-8 relative overflow-hidden bg-gradient-to-r ${gradientClass}`}>
+      <div className={`w-full rounded-3xl p-6 md:p-8 mb-6 relative overflow-hidden bg-gradient-to-r ${gradientClass}`}>
         <div className="absolute inset-0 bg-black/20 backdrop-blur-[2px]"></div>
         <div className="relative z-10 flex flex-col md:flex-row items-center gap-6">
           <div className="text-7xl bg-white/20 p-6 rounded-full backdrop-blur-md shadow-xl border border-white/30">
@@ -79,7 +81,7 @@ const EventPage = () => {
         </div>
       </div>
 
-      <div className="flex justify-center mb-8">
+      <div className="flex justify-center mb-6">
         <div className="glass-card p-1 rounded-full flex gap-2 w-max">
           <button
             onClick={() => setActiveTab('photos')}
