@@ -45,8 +45,8 @@ const Photos = ({ eventId, eventTitle }) => {
 
   const breakpointColumnsObj = {
     default: 4,
-    1100: 3,
-    700: 2,
+    1200: 3,
+    800: 2,
     500: 1
   };
 
@@ -90,15 +90,18 @@ const Photos = ({ eventId, eventTitle }) => {
         {files.map((file, index) => (
           <motion.div 
             key={file.id} 
-            whileHover={{ scale: 1.03, filter: "brightness(1.1)" }}
-            className="mb-4 relative group cursor-pointer rounded-2xl overflow-hidden glass-card shadow-lg"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: index * 0.05 }}
+            whileHover={{ y: -8 }}
+            className="mb-6 relative group cursor-pointer rounded-2xl overflow-hidden glass-card shadow-xl border border-white/5"
             onClick={() => openGallery(index)}
           >
-            <div className="protect-image-wrapper w-full min-h-[250px] bg-white/5 flex items-center justify-center">
+            <div className="protect-image-wrapper w-full h-full min-h-[250px] bg-white/5 flex items-center justify-center relative overflow-hidden">
               <img 
                 src={file.thumbnailUrl} 
                 alt={file.name || "Event memory"} 
-                className="w-full h-auto object-cover block transition-opacity duration-500"
+                className="w-full h-auto object-cover block transition-all duration-700 ease-out group-hover:scale-110"
                 loading="eager"
                 onError={(e) => { 
                   if (!e.target.dataset.tried) {
@@ -109,21 +112,22 @@ const Photos = ({ eventId, eventTitle }) => {
                   }
                 }}
               />
-              <div className="image-overlay"></div>
-            </div>
-            
-            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 flex items-center justify-center pointer-events-none">
-              <span className="text-white font-poppins font-medium drop-shadow-md">View 💕</span>
-            </div>
-            
-            <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
-              <button 
-                onClick={(e) => handleDownloadClick(e, file)}
-                className="bg-gold text-dark text-xs px-3 py-1.5 rounded-full hover:bg-white hover:text-dark transition-colors flex items-center gap-1 shadow-lg font-medium"
-                aria-label="Download Photo"
-              >
-                🔒 Download
-              </button>
+              
+              {/* Premium Hover Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 z-10 flex flex-col items-center justify-end pb-8 gap-4 translate-y-4 group-hover:translate-y-0">
+                <div className="bg-gold/90 text-dark px-6 py-2 rounded-full font-poppins font-bold text-sm shadow-2xl scale-90 group-hover:scale-100 transition-transform duration-500">
+                  View ❤️
+                </div>
+                <button 
+                  onClick={(e) => handleDownloadClick(e, file)}
+                  className="bg-white/20 hover:bg-white/40 text-white backdrop-blur-md border border-white/30 text-xs px-4 py-2 rounded-full flex items-center gap-2 shadow-lg font-medium transition-all"
+                  aria-label="Download Photo"
+                >
+                  <span>Download</span> ⬇
+                </button>
+              </div>
+              
+              <div className="image-overlay opacity-50 group-hover:opacity-0 transition-opacity duration-500"></div>
             </div>
           </motion.div>
         ))}

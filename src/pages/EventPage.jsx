@@ -61,40 +61,46 @@ const EventPage = () => {
         </button>
       </div>
 
-      <div className={`w-full rounded-3xl p-6 md:p-8 mb-6 relative overflow-hidden bg-gradient-to-r ${gradientClass}`}>
-        <div className="absolute inset-0 bg-black/20 backdrop-blur-[2px]"></div>
-        <div className="relative z-10 flex flex-col md:flex-row items-center gap-6">
-          <div className="text-7xl bg-white/20 p-6 rounded-full backdrop-blur-md shadow-xl border border-white/30">
+      <div className={`w-full rounded-2xl p-6 md:p-10 mb-8 relative overflow-hidden bg-gradient-to-r ${gradientClass} shadow-2xl`}>
+        <div className="absolute inset-0 bg-black/10 backdrop-blur-[1px]"></div>
+        <div className="relative z-10 flex flex-col md:flex-row items-center gap-6 md:gap-10">
+          <div className="w-24 h-24 md:w-32 md:h-32 flex-shrink-0 bg-white/20 rounded-full backdrop-blur-md shadow-2xl border border-white/40 flex items-center justify-center text-5xl md:text-6xl">
             {eventData.emoji}
           </div>
           <div className="text-center md:text-left">
-            <h1 className="text-4xl md:text-5xl font-playfair font-bold text-white mb-2 drop-shadow-md">
+            <h1 className="text-3xl md:text-5xl font-playfair font-bold text-white mb-2 tracking-tight drop-shadow-lg">
               {eventData.title}
             </h1>
-            <p className="font-poppins text-white/90 text-sm md:text-base bg-black/20 px-3 py-1 rounded-full inline-block mb-2">
-              {eventData.date}
-            </p>
-            <p className="font-poppins text-white/80 max-w-md">
-              {eventData.description}
-            </p>
+            <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4 font-poppins">
+              <span className="text-white/90 bg-black/20 px-4 py-1 rounded-full text-xs md:text-sm font-medium border border-white/10 backdrop-blur-sm shadow-inner">
+                📅 {eventData.date}
+              </span>
+              <p className="text-white/70 text-sm md:text-base italic tracking-wide">
+                {eventData.description}
+              </p>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="flex justify-center mb-6">
-        <div className="glass-card p-1 rounded-full flex gap-2 w-max">
+      <div className="flex justify-center mb-10">
+        <div className="bg-white/5 backdrop-blur-md p-1.5 rounded-full flex gap-1.5 border border-white/10 shadow-xl">
           <button
             onClick={() => setActiveTab('photos')}
-            className={`px-6 py-2 rounded-full font-poppins text-sm transition-all duration-300 ${
-              activeTab === 'photos' ? 'bg-gold text-dark font-semibold shadow-lg' : 'text-white/50 hover:text-white hover:bg-white/10'
+            className={`px-8 py-2.5 rounded-full font-poppins text-sm transition-all duration-500 flex items-center gap-2 ${
+              activeTab === 'photos' 
+              ? 'bg-gradient-to-r from-gold to-yellow-400 text-dark font-bold shadow-[0_0_20px_rgba(255,215,0,0.3)] scale-105' 
+              : 'text-white/60 hover:text-white hover:bg-white/10'
             }`}
           >
             📷 Photos
           </button>
           <button
             onClick={() => setActiveTab('videos')}
-            className={`px-6 py-2 rounded-full font-poppins text-sm transition-all duration-300 ${
-              activeTab === 'videos' ? 'bg-gold text-dark font-semibold shadow-lg' : 'text-white/50 hover:text-white hover:bg-white/10'
+            className={`px-8 py-2.5 rounded-full font-poppins text-sm transition-all duration-500 flex items-center gap-2 ${
+              activeTab === 'videos' 
+              ? 'bg-gradient-to-r from-gold to-yellow-400 text-dark font-bold shadow-[0_0_20px_rgba(255,215,0,0.3)] scale-105' 
+              : 'text-white/60 hover:text-white hover:bg-white/10'
             }`}
           >
             🎬 Videos

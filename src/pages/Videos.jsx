@@ -21,10 +21,10 @@ const Videos = ({ eventId, eventTitle }) => {
 
   return (
     <div className="w-full">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {files.map((file) => (
-          <div key={file.id} className="glass-card p-4 rounded-2xl flex flex-col relative shadow-xl overflow-hidden">
-            <div className="relative w-full aspect-video bg-black/40 rounded-xl overflow-hidden flex items-center justify-center protect-image-wrapper">
+          <div key={file.id} className="glass-card group p-5 rounded-2xl flex flex-col relative shadow-2xl overflow-hidden border border-white/5 hover:border-gold/30 transition-all duration-500 hover:translate-y-[-4px]">
+            <div className="relative w-full aspect-video bg-black/40 rounded-xl overflow-hidden flex items-center justify-center protect-image-wrapper shadow-inner">
               <iframe
                 src={file.embedUrl}
                 title={file.name}
@@ -36,16 +36,16 @@ const Videos = ({ eventId, eventTitle }) => {
               ></iframe>
             </div>
             
-            <div className="mt-4 flex flex-col gap-2 items-center px-2">
-              <h4 className="font-poppins text-white truncate text-center w-full text-sm" title={file.name}>
-                {file.name.replace(/\.[^/.]+$/, "")}
+            <div className="mt-5 flex flex-col gap-4 items-center">
+              <h4 className="font-poppins text-white/90 font-medium truncate text-center w-full text-base" title={file.name}>
+                ✨ {file.name.replace(/\.[^/.]+$/, "")}
               </h4>
               <button 
                 onClick={(e) => handleDownloadClick(e, file)}
-                className="bg-white/10 hover:bg-gold hover:text-black border border-gold/30 text-gold text-xs px-4 py-2 rounded-full transition-colors flex items-center gap-1 shadow-md w-full justify-center"
+                className="bg-gold/10 hover:bg-gold text-gold hover:text-dark border border-gold/30 text-sm px-8 py-2.5 rounded-full transition-all duration-300 flex items-center gap-2 shadow-lg font-bold w-max"
                 aria-label="Download Video"
               >
-                🔒 Download
+                🔒 Download Video
               </button>
             </div>
           </div>
