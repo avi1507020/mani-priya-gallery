@@ -24,7 +24,7 @@ const DownloadModal = ({ isOpen, onClose, file, eventName }) => {
           window.open(file.downloadUrl, '_blank');
         } else {
           // Photos: fetch and canvas watermark
-          const highResUrl = file.thumbnailUrl.replace(/=w\d+/, '=w1600');
+          const highResUrl = `https://lh3.googleusercontent.com/d/${file.id}=s1600`;
           const blob = await addWatermark(highResUrl, eventName);
           const blobUrl = URL.createObjectURL(blob);
           
