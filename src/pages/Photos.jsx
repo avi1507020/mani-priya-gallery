@@ -94,10 +94,12 @@ const Photos = ({ eventId, eventTitle }) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: index * 0.05 }}
             whileHover={{ y: -8 }}
-            className="mb-6 relative group cursor-pointer rounded-2xl overflow-hidden glass-card shadow-xl border border-white/5"
-            onClick={() => openGallery(index)}
+            className="mb-8 relative group cursor-pointer rounded-2xl overflow-hidden glass-card shadow-2xl border border-white/5"
           >
-            <div className="protect-image-wrapper w-full h-full min-h-[250px] bg-white/5 flex items-center justify-center relative overflow-hidden">
+            <div 
+              onClick={() => openGallery(index)}
+              className="protect-image-wrapper w-full h-full min-h-[250px] bg-white/5 flex items-center justify-center relative overflow-hidden"
+            >
               <img 
                 src={file.thumbnailUrl} 
                 alt={file.name || "Event memory"} 
@@ -114,16 +116,25 @@ const Photos = ({ eventId, eventTitle }) => {
               />
               
               {/* Premium Hover Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 z-10 flex flex-col items-center justify-end pb-8 gap-4 translate-y-4 group-hover:translate-y-0">
-                <div className="bg-gold/90 text-dark px-6 py-2 rounded-full font-poppins font-bold text-sm shadow-2xl scale-90 group-hover:scale-100 transition-transform duration-500">
+              <div 
+                className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 z-10 flex flex-col items-center justify-end pb-8 gap-4 translate-y-4 group-hover:translate-y-0"
+              >
+                <div 
+                  onClick={() => openGallery(index)}
+                  className="bg-gold/90 text-dark px-6 py-2 rounded-full font-poppins font-bold text-sm shadow-2xl scale-90 group-hover:scale-100 transition-transform duration-500 hover:bg-white"
+                >
                   View ❤️
                 </div>
                 <button 
-                  onClick={(e) => handleDownloadClick(e, file)}
-                  className="bg-white/20 hover:bg-white/40 text-white backdrop-blur-md border border-white/30 text-xs px-4 py-2 rounded-full flex items-center gap-2 shadow-lg font-medium transition-all"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleDownloadClick(e, file);
+                  }}
+                  className="bg-white/20 hover:bg-rose/80 text-white backdrop-blur-md border border-white/30 text-xs px-5 py-2.5 rounded-full flex items-center gap-2 shadow-lg font-bold transition-all hover:scale-105 active:scale-95"
                   aria-label="Download Photo"
                 >
-                  <span>Download</span> ⬇
+                  <span>Download High-Res</span> ⬇
                 </button>
               </div>
               
