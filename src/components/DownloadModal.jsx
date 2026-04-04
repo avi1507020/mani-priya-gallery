@@ -13,7 +13,7 @@ const DownloadModal = ({ isOpen, onClose, file, eventName }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (pin === '1234') {
+    if (pin === '2511') {
       setIsSuccess(true);
       setIsDownloading(true);
       

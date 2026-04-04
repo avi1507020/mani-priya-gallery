@@ -50,7 +50,7 @@ export const fetchDriveFiles = async (eventId, type) => {
       return {
         id: file.id,
         name: file.name,
-        thumbnailUrl: thumbnailUrl,
+        thumbnailUrl: `https://drive.google.com/thumbnail?id=${file.id}&sz=s800`,
         embedUrl: `https://drive.google.com/file/d/${file.id}/preview`,
         viewUrl: file.webViewLink || `https://drive.google.com/file/d/${file.id}/view`,
         downloadUrl: file.webContentLink || `https://drive.google.com/uc?export=download&id=${file.id}`,

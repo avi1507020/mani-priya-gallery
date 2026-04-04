@@ -31,18 +31,17 @@ const GalleryModal = ({ isOpen, onClose, photos, currentIndex, setCurrentIndex, 
             className="absolute inset-0 bg-black/80 backdrop-blur-xl"
           ></motion.div>
           
-          <button 
-            onClick={onClose} 
-            className="fixed top-4 right-4 md:top-8 md:right-8 z-[110] text-white bg-white/10 hover:bg-white/30 backdrop-blur-md rounded-full w-12 h-12 flex items-center justify-center text-2xl transition-all duration-300 shadow-xl border border-white/20"
-            aria-label="Close"
-          >✕</button>
-
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.8, opacity: 0 }}
-            className="relative z-10 flex flex-col items-center justify-center w-full h-full max-w-5xl"
+            className="relative z-10 flex flex-col items-center justify-center w-full h-[90vh] max-w-5xl"
           >
+            <button 
+              onClick={(e) => { e.stopPropagation(); onClose(); }} 
+              className="absolute -top-4 -right-2 md:-top-10 md:-right-10 z-[110] text-white/70 hover:text-white bg-white/10 hover:bg-white/30 backdrop-blur-md rounded-full w-10 h-10 flex items-center justify-center text-2xl transition-all duration-300 shadow-xl border border-white/20"
+              aria-label="Close"
+            >✕</button>
 
             <button 
               onClick={(e) => { e.stopPropagation(); setCurrentIndex((prev) => (prev - 1 + photos.length) % photos.length); }}
@@ -52,10 +51,10 @@ const GalleryModal = ({ isOpen, onClose, photos, currentIndex, setCurrentIndex, 
 
             <div className="protect-image-wrapper relative flex justify-center items-center h-auto max-h-[80vh] w-full">
               <img 
-                src={currentPhoto?.thumbnailUrl?.replace(/=w\d+/, '=w1600') || currentPhoto?.thumbnailUrl} 
+                src={`https://drive.google.com/thumbnail?id=${currentPhoto?.id}&sz=s1600`} 
                 alt="Memory" 
-                className="max-w-[95vw] max-h-[80vh] md:max-h-[85vh] object-contain rounded-2xl pointer-events-none shadow-2xl"
-                loading="lazy"
+                className="max-w-[95vw] max-h-[75vh] md:max-h-[85vh] object-contain rounded-2xl pointer-events-none shadow-2xl transition-opacity duration-300"
+                loading="eager"
               />
               <div className="image-overlay rounded-2xl"></div>
             </div>

@@ -18,7 +18,7 @@ const events = [
   {
     id: "prewedding",
     title: "Pre-Wedding",
-    emoji: "🧑🤝🧑",
+    emoji: "❤️",
     date: "Coming Soon",
     description: "Our story captured before the big day",
     status: "coming-soon",
