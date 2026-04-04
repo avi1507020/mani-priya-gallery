@@ -147,11 +147,11 @@ const Home = () => {
           className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 mb-6 mt-4"
         >
           <div className="bg-gold/10 text-gold border border-gold/30 px-5 py-1.5 rounded-full text-xs sm:text-sm font-semibold backdrop-blur-sm shadow-[0_0_15px_rgba(255,215,0,0.15)] flex items-center justify-center w-max mx-auto sm:mx-0">
-            📍 Bankura
+            📍 Bokaro
           </div>
           <div className="text-xl hidden sm:block select-none opacity-90">💑</div>
           <div className="bg-gold/10 text-gold border border-gold/30 px-5 py-1.5 rounded-full text-xs sm:text-sm font-semibold backdrop-blur-sm shadow-[0_0_15px_rgba(255,215,0,0.15)] flex items-center justify-center w-max mx-auto sm:mx-0">
-            📍 Bokaro
+            📍 Bankura
           </div>
         </motion.div>
 
@@ -172,7 +172,15 @@ const Home = () => {
           transition={{ delay: 0.5, duration: 0.8 }}
           className="text-lavender italic font-playfair tracking-wide text-sm md:text-base px-6 mb-2"
         >
-          From Bankura to Bokaro, United Forever ✨
+          From Bokaro to Bankura, United Forever ✨
+        </motion.p>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6, duration: 0.8 }}
+          className="text-gold font-poppins font-semibold text-sm mb-2"
+        >
+          #PriyaMani
         </motion.p>
         
         {/* Animated Divider */}

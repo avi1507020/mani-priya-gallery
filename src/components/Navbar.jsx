@@ -25,7 +25,7 @@ const Navbar = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
       className={`fixed top-0 left-0 w-full h-[60px] md:h-[68px] lg:h-[72px] px-4 md:px-8 lg:px-16 flex justify-between items-center z-50 transition-all duration-300 ${
-        scrolled ? 'bg-dark/80 backdrop-blur-md shadow-lg border-b border-white/10' : 'bg-white/5 backdrop-blur-sm border-b border-white/10'
+        scrolled ? 'bg-[#2D1B1B]/90 backdrop-blur-md shadow-lg border-b border-white/10' : 'bg-[#1E1111]/80 backdrop-blur-sm border-b border-white/10'
       }`}
     >
       <Link to="/" className="font-playfair font-bold italic truncate flex-shrink-0 z-50">
@@ -82,7 +82,7 @@ const Navbar = () => {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3, ease: 'backOut' }}
-            className="absolute top-[60px] left-0 w-full bg-dark/95 backdrop-blur-2xl border-b border-white/10 md:hidden flex flex-col px-6 py-2 z-40 overflow-hidden shadow-2xl"
+            className="absolute top-[60px] left-0 w-full bg-[#1E1111]/95 backdrop-blur-2xl border-b border-white/10 md:hidden flex flex-col px-6 py-2 z-40 overflow-hidden shadow-2xl"
           >
             <Link 
               to="/" 
