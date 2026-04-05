@@ -36,6 +36,19 @@ const Navbar = () => {
           💍 M & P
         </span>
       </Link>
+
+      {/* Developer Credit - Perfectly Centered */}
+      <div className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center z-40 pointer-events-none sm:pointer-events-auto px-4 max-w-[30%] sm:max-w-[40%] md:max-w-[50%]">
+        <span className="hidden md:block text-white/50 hover:text-white/80 transition-opacity duration-200 text-xs font-poppins cursor-default select-none whitespace-nowrap overflow-hidden text-ellipsis">
+          💻 Developed by Avishek ( Mani )
+        </span>
+        <span className="hidden sm:block md:hidden text-white/50 hover:text-white/80 transition-opacity duration-200 text-xs font-poppins cursor-default select-none whitespace-nowrap overflow-hidden text-ellipsis">
+          💻 Avishek ( Mani )
+        </span>
+        <span className="hidden min-[360px]:block sm:hidden text-white/40 hover:text-white/80 transition-opacity duration-200 text-[10px] font-poppins cursor-default select-none whitespace-nowrap overflow-hidden text-ellipsis">
+          💻⚙️ Avishek
+        </span>
+      </div>
       
       <div className="hidden md:flex flex-1"></div>
       
