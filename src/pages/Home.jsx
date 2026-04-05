@@ -69,7 +69,7 @@ const Home = () => {
   };
 
   return (
-    <div className="flex flex-col items-center pt-8 md:pt-12 pb-20 px-4 w-full max-w-[1400px] mx-auto min-h-screen relative overflow-hidden">
+    <div className="flex flex-col items-center justify-center pt-8 md:pt-12 pb-8 px-4 w-full max-w-[1400px] mx-auto min-h-screen relative overflow-hidden">
       
       {/* Background Enhancements */}
       <div className="absolute inset-0 flex justify-center items-center pointer-events-none z-0">
@@ -147,11 +147,11 @@ const Home = () => {
           className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 mb-6 mt-4"
         >
           <div className="bg-gold/10 text-gold border border-gold/30 px-5 py-1.5 rounded-full text-xs sm:text-sm font-semibold backdrop-blur-sm shadow-[0_0_15px_rgba(255,215,0,0.15)] flex items-center justify-center w-max mx-auto sm:mx-0">
-            📍 Bokaro
+            📍 Bankura
           </div>
           <div className="text-xl hidden sm:block select-none opacity-90">💑</div>
           <div className="bg-gold/10 text-gold border border-gold/30 px-5 py-1.5 rounded-full text-xs sm:text-sm font-semibold backdrop-blur-sm shadow-[0_0_15px_rgba(255,215,0,0.15)] flex items-center justify-center w-max mx-auto sm:mx-0">
-            📍 Bankura
+            📍 Bokaro
           </div>
         </motion.div>
 
@@ -197,7 +197,7 @@ const Home = () => {
         variants={containerVariants}
         initial="hidden"
         animate="show"
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-6 lg:gap-8 w-full px-4 sm:px-8 lg:px-16"
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-6 lg:gap-8 w-full px-4 sm:px-8 lg:px-16 pb-8 mb-0"
       >
         {events.map((event) => (
           <motion.div
