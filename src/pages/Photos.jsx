@@ -28,15 +28,17 @@ const Photos = ({ eventId, eventTitle }) => {
     }
   }, [loading, error, files.length]);
 
+  const sortedFiles = [...files].sort((a, b) => b.name.localeCompare(a.name));
+
   useEffect(() => {
     let interval;
-    if (isSlideshow && isGalleryOpen && files.length > 0) {
+    if (isSlideshow && isGalleryOpen && sortedFiles.length > 0) {
       interval = setInterval(() => {
-        setSelectedPhotoIndex((prev) => (prev + 1) % files.length);
+        setSelectedPhotoIndex((prev) => (prev + 1) % sortedFiles.length);
       }, 5000);
     }
     return () => clearInterval(interval);
-  }, [isSlideshow, isGalleryOpen, files.length]);
+  }, [isSlideshow, isGalleryOpen, sortedFiles.length]);
 
   if (loading) {
     return (
@@ -93,7 +95,7 @@ const Photos = ({ eventId, eventTitle }) => {
             📸 {eventTitle} Memories
           </h2>
           <span className="bg-gold/20 border border-gold/40 text-white/80 text-[10px] md:text-xs px-3 py-1 rounded-full font-poppins font-medium flex items-center gap-1.5 whitespace-nowrap">
-            🖼️ {files.length} Photos
+            🖼️ {sortedFiles.length} Photos
           </span>
         </div>
         
@@ -121,7 +123,7 @@ const Photos = ({ eventId, eventTitle }) => {
 
       {/* Grid Layout */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-2 phone-large:gap-3 tablet:gap-4 desktop:gap-6 p-3 phone-large:p-4 tablet:p-5 laptop:p-6">
-        {files.map((file, index) => (
+        {sortedFiles.map((file, index) => (
           <motion.div 
             key={file.id} 
             initial={{ opacity: 0, scale: 0.9 }}
@@ -197,7 +199,7 @@ const Photos = ({ eventId, eventTitle }) => {
           setIsGalleryOpen(false);
           setIsSlideshow(false);
         }}
-        photos={files}
+        photos={sortedFiles}
         currentIndex={selectedPhotoIndex}
         setCurrentIndex={setSelectedPhotoIndex}
         eventName={eventTitle || 'Event'}
