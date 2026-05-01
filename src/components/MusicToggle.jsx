@@ -95,8 +95,23 @@ export const MusicProvider = ({ children }) => {
     };
   }, [selectedTrack]);
 
+  // ── Video interaction helpers ────────────────────────────────────────────
+  // Pause bg music for video playback (does NOT change selectedTrack)
+  const pauseForVideo = () => {
+    if (bgAudioRef.current && !bgAudioRef.current.paused) {
+      bgAudioRef.current.pause();
+    }
+  };
+
+  // Resume bg music after video stops (only if a track was selected)
+  const resumeAfterVideo = () => {
+    if (bgAudioRef.current && selectedTrack !== 'off') {
+      bgAudioRef.current.play().catch(() => {});
+    }
+  };
+
   return (
-    <MusicContext.Provider value={{ selectedTrack, setSelectedTrack, TRACKS }}>
+    <MusicContext.Provider value={{ selectedTrack, setSelectedTrack, TRACKS, pauseForVideo, resumeAfterVideo }}>
       {children}
     </MusicContext.Provider>
   );

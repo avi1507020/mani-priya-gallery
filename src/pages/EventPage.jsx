@@ -36,9 +36,18 @@ const eventsDict = {
 };
 
 const EventPage = () => {
-  const { eventId } = useParams();
+  const { eventId, tabId } = useParams();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('photos');
+  
+  // Determine active tab from URL, defaulting to 'photos'
+  const activeTab = tabId === 'videos' ? 'videos' : 'photos';
+
+  React.useEffect(() => {
+    // Redirect /event/:eventId to /event/:eventId/photos
+    if (!tabId) {
+      navigate(`/event/${eventId}/photos`, { replace: true });
+    }
+  }, [eventId, tabId, navigate]);
   
   const eventData = eventsDict[eventId];
 
@@ -86,7 +95,7 @@ const EventPage = () => {
       <div className="flex justify-center mb-10">
         <div className="bg-white/5 backdrop-blur-md p-1.5 rounded-full flex gap-1.5 border border-white/10 shadow-xl">
           <button
-            onClick={() => setActiveTab('photos')}
+            onClick={() => navigate(`/event/${eventId}/photos`)}
             className={`px-8 py-2.5 rounded-full font-poppins text-sm transition-all duration-500 flex items-center gap-2 ${
               activeTab === 'photos' 
               ? 'bg-gradient-to-r from-gold to-yellow-400 text-dark font-bold shadow-[0_0_20px_rgba(255,215,0,0.3)] scale-105' 
@@ -96,7 +105,7 @@ const EventPage = () => {
             📷 Photos
           </button>
           <button
-            onClick={() => setActiveTab('videos')}
+            onClick={() => navigate(`/event/${eventId}/videos`)}
             className={`px-8 py-2.5 rounded-full font-poppins text-sm transition-all duration-500 flex items-center gap-2 ${
               activeTab === 'videos' 
               ? 'bg-gradient-to-r from-gold to-yellow-400 text-dark font-bold shadow-[0_0_20px_rgba(255,215,0,0.3)] scale-105' 

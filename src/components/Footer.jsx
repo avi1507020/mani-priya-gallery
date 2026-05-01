@@ -16,7 +16,7 @@ const Footer = () => {
             <span className="text-xs">Made with <span className="text-rose-400">❤️</span> by </span>
             <span className="font-bold ml-1">Avishek Senapati</span>
             <span className="text-[#1A0A2E] opacity-50 mx-2">·</span>
-            <span className="text-xs opacity-80">QA Automation Engineer</span>
+            <span className="text-xs opacity-80">SDET | Automation Engineer</span>
           </div>
         </div>
 
@@ -31,7 +31,7 @@ const Footer = () => {
             <span>💻</span>
             <span className="font-bold mx-1">Avishek Senapati</span>
             <span className="text-[#1A0A2E] opacity-50 mx-1">·</span>
-            <span className="text-xs opacity-80">QA Automation Engineer</span>
+            <span className="text-xs opacity-80">SDET | Automation Engineer</span>
           </div>
         </div>
       </div>
