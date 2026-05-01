@@ -1,105 +1,112 @@
 import React, { createContext, useContext, useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
+// ─── Music tracks ────────────────────────────────────────────────────────────
+export const TRACKS = [
+  { id: 'mani',  label: "🎷 Mani's Favorite",  src: '/music/mani-favorite.mp3' },
+  { id: 'priya', label: "🎵 Priya's Favorite", src: '/music/priya-favorite.mp3' },
+  { id: 'off',   label: '🔇 Off',               src: null },
+];
+
+// ─── Context ─────────────────────────────────────────────────────────────────
 export const MusicContext = createContext();
 
 export const MusicProvider = ({ children }) => {
-  const [isPlaying, setIsPlaying] = useState(() => {
-    const saved = localStorage.getItem('musicPlaying');
-    return saved === null ? true : saved === 'true';
-  });
-  const [isAudioLoaded, setIsAudioLoaded] = useState(false);
-  const audioRef = useRef(null);
-  const playTriggered = useRef(false);
+  // Default: music OFF
+  const [selectedTrack, setSelectedTrack] = useState('off');
 
+  const bgAudioRef   = useRef(null);   // looping background track
+  const welcomeRef   = useRef(null);   // one-time welcome tune
+  const welcomePlayed = useRef(false); // guard: play welcome only once
+
+  // ── One-time welcome tune on first user interaction ─────────────────────
   useEffect(() => {
-    localStorage.setItem('musicPlaying', isPlaying);
-  }, [isPlaying]);
+    welcomeRef.current = new Audio('/music/welcome.mp3');
+    welcomeRef.current.loop   = false;
+    welcomeRef.current.volume = 0.5;
 
-  useEffect(() => {
-    audioRef.current = new Audio('/bg.mp3'); 
-    audioRef.current.loop = true;
-    audioRef.current.volume = 0; 
-
-    const handleCanPlay = () => setIsAudioLoaded(true);
-    audioRef.current.addEventListener('canplaythrough', handleCanPlay);
-
-    // Support for browsers that block autoplay
-    const handleFirstInteraction = () => {
-      if (isPlaying && !playTriggered.current && audioRef.current) {
-        audioRef.current.play()
-          .then(() => {
-            playTriggered.current = true;
-            document.removeEventListener('click', handleFirstInteraction);
-            document.removeEventListener('touchstart', handleFirstInteraction);
-          })
-          .catch(e => console.log('Final autoplay block:', e));
-      }
+    const playWelcome = () => {
+      if (welcomePlayed.current) return;
+      welcomePlayed.current = true;
+      welcomeRef.current
+        .play()
+        .catch(() => {}); // silently ignore if still blocked
+      // Remove listeners once fired
+      document.removeEventListener('click',      playWelcome);
+      document.removeEventListener('touchstart', playWelcome);
+      document.removeEventListener('keydown',    playWelcome);
     };
 
-    document.addEventListener('click', handleFirstInteraction);
-    document.addEventListener('touchstart', handleFirstInteraction);
+    // Try immediate autoplay first
+    welcomeRef.current
+      .play()
+      .then(() => {
+        welcomePlayed.current = true;
+      })
+      .catch(() => {
+        // Browser blocked autoplay – defer to first interaction
+        document.addEventListener('click',      playWelcome);
+        document.addEventListener('touchstart', playWelcome);
+        document.addEventListener('keydown',    playWelcome);
+      });
 
     return () => {
-      if (audioRef.current) {
-        audioRef.current.removeEventListener('canplaythrough', handleCanPlay);
-        audioRef.current.pause();
-        audioRef.current.src = "";
+      document.removeEventListener('click',      playWelcome);
+      document.removeEventListener('touchstart', playWelcome);
+      document.removeEventListener('keydown',    playWelcome);
+      if (welcomeRef.current) {
+        welcomeRef.current.pause();
+        welcomeRef.current.src = '';
       }
-      document.removeEventListener('click', handleFirstInteraction);
-      document.removeEventListener('touchstart', handleFirstInteraction);
     };
-  }, []);
+  }, []); // runs once on mount (page load)
 
+  // ── Background looping track ─────────────────────────────────────────────
   useEffect(() => {
-    if (!audioRef.current) return;
-    
-    if (isPlaying) {
-      const playPromise = audioRef.current.play();
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => {
-            playTriggered.current = true;
-            let vol = audioRef.current.volume;
-            const fadeIn = setInterval(() => {
-              vol += 0.05;
-              if (vol >= 0.4) {
-                vol = 0.4;
-                clearInterval(fadeIn);
-              }
-              audioRef.current.volume = vol;
-            }, 50);
-          })
-          .catch(e => {
-            console.log('Autoplay deferred for interaction', e);
-          });
-      }
-    } else {
-      let vol = audioRef.current.volume;
-      const fadeOut = setInterval(() => {
-        vol -= 0.05;
-        if (vol <= 0) {
-          vol = 0;
-          clearInterval(fadeOut);
-          audioRef.current.pause();
-        } else {
-          audioRef.current.volume = vol;
-        }
-      }, 50);
+    // Stop previous track
+    if (bgAudioRef.current) {
+      bgAudioRef.current.pause();
+      bgAudioRef.current.src = '';
+      bgAudioRef.current = null;
     }
-  }, [isPlaying]);
 
-  const toggleMusic = () => setIsPlaying(prev => !prev);
+    const track = TRACKS.find(t => t.id === selectedTrack);
+    if (!track || !track.src) return; // "off" selected
+
+    const audio = new Audio(track.src);
+    audio.loop   = true;
+    audio.volume = 0.4;
+    bgAudioRef.current = audio;
+
+    audio.play().catch(() => {
+      // If blocked, play on first interaction
+      const tryPlay = () => {
+        audio.play().catch(() => {});
+        document.removeEventListener('click',      tryPlay);
+        document.removeEventListener('touchstart', tryPlay);
+      };
+      document.addEventListener('click',      tryPlay);
+      document.addEventListener('touchstart', tryPlay);
+    });
+
+    return () => {
+      audio.pause();
+      audio.src = '';
+    };
+  }, [selectedTrack]);
 
   return (
-    <MusicContext.Provider value={{ isPlaying, toggleMusic }}>
+    <MusicContext.Provider value={{ selectedTrack, setSelectedTrack, TRACKS }}>
       {children}
     </MusicContext.Provider>
   );
 };
 
+// ─── MusicToggle (standalone floating button – kept for backward compat) ────
+// Not actively used since Navbar manages the dropdown, but exported for safety.
 const MusicToggle = () => {
-  const { isPlaying, toggleMusic } = useContext(MusicContext);
+  const { selectedTrack } = useContext(MusicContext);
+  const isPlaying = selectedTrack !== 'off';
 
   return (
     <motion.button
@@ -107,7 +114,6 @@ const MusicToggle = () => {
       animate={{ opacity: 1, scale: 1 }}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
-      onClick={toggleMusic}
       className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 rounded-full px-4 py-2.5 text-xs flex items-center justify-center gap-2.5 transition-all duration-300 font-poppins shadow-lg"
       style={{
         backgroundColor: isPlaying ? 'rgba(255, 215, 0, 0.2)' : 'rgba(0, 0, 0, 0.5)',
@@ -117,17 +123,12 @@ const MusicToggle = () => {
         boxShadow: isPlaying ? '0 0 20px rgba(255, 215, 0, 0.2)' : '0 4px 12px rgba(0,0,0,0.2)',
         color: 'white',
       }}
-      aria-label={isPlaying ? 'Pause music' : 'Play music'}
+      aria-label={isPlaying ? 'Music playing' : 'Music off'}
     >
       <div className="flex items-center gap-2">
-        <span className="text-base leading-none">
-          {isPlaying ? '🎶' : '🔇'}
-        </span>
-        <span className="font-medium tracking-wide">
-          {isPlaying ? 'Playing' : 'Muted'}
-        </span>
+        <span className="text-base leading-none">{isPlaying ? '🎵' : '🔇'}</span>
+        <span className="font-medium tracking-wide">{isPlaying ? 'Playing' : 'Muted'}</span>
       </div>
-      
       {isPlaying && (
         <span className="relative flex h-2 w-2">
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gold opacity-75"></span>
