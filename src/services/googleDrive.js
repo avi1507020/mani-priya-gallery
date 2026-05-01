@@ -28,7 +28,7 @@ export const fetchDriveFiles = async (eventId, type) => {
     const query = `'${folderId}' in parents and trashed = false and ${mimeTypeQuery}`;
     const fields = "files(id, name, mimeType, createdTime, thumbnailLink, webContentLink, webViewLink)";
     
-    const url = `https://www.googleapis.com/drive/v3/files?key=${API_KEY}&q=${encodeURIComponent(query)}&orderBy=createdTime desc&fields=${encodeURIComponent(fields)}`;
+    const url = `https://www.googleapis.com/drive/v3/files?key=${API_KEY}&q=${encodeURIComponent(query)}&orderBy=createdTime desc&fields=${encodeURIComponent(fields)}&pageSize=1000`;
     
     const response = await fetch(url);
     if (!response.ok) {
